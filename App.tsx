@@ -1,21 +1,15 @@
-import React, { default as ReactFromImport } from "react";
-import { default as ReactReduxFromImport, Provider } from "react-redux";
-import { NativeStackScreenProps } from "@react-navigation/native-stack";
-import { StackNavigationOptions } from "@react-navigation/stack/lib/typescript/src/types";
-import { CardStyleInterpolators, createStackNavigator, HeaderStyleInterpolators } from '@react-navigation/stack';
+import React from "react";
+import {NativeStackScreenProps} from "@react-navigation/native-stack";
+import {createStackNavigator} from '@react-navigation/stack';
 
 import ENV from "./config";
-import { ReactFromModule, ReactReduxFromModule } from "reactgenie-lib";
+import {EditTimerView} from "./src/EditTimerView";
+import {MainView} from "./src/MainView";
+import {cardStyle, modalStyle} from "./src/commonStyles";
+import {Provider} from "react-redux";
+import {reactGenieStore} from "./timeStore";
+import { ModalityProvider } from "reactgenie-lib";
 
-import { TimerView } from "./src/TimerView";
-import { NewTimerForm } from "./src/NewTimerForm";
-
-
-console.log("React is ReactFromModule", ReactFromModule === ReactFromImport);
-console.log(
-  "ReactRedux is ReactReduxFromModule: ",
-  ReactReduxFromImport === ReactReduxFromModule
-);
 
 export let AppNavigator: any = null;
 
@@ -24,31 +18,15 @@ type Props = NativeStackScreenProps<any, any>
 const TimerTab = ({route, navigation}: Props) => {
     AppNavigator = navigation
     return (
-        <TimerView/>
+        <MainView {...route.params}/>
     )
 }
 
-const TimerModalTab = ({route, navigation}: Props) => {
+const EditTimerTab = ({route, navigation}: Props) => {
     AppNavigator = navigation
     return (
-          <NewTimerForm {...route.params}/>
+        <EditTimerView {...route.params}/>
     )
-}
-
-const cardStyle: StackNavigationOptions = {
-    presentation: 'card' ,
-    animationEnabled: true,
-    headerStyleInterpolator: HeaderStyleInterpolators.forUIKit,
-    cardStyleInterpolator: CardStyleInterpolators.forHorizontalIOS
-}
-
-const modalStyle: StackNavigationOptions = {
-    presentation: 'modal' ,
-    animationEnabled: true,
-    headerStyleInterpolator: HeaderStyleInterpolators.forUIKit,
-    cardStyleInterpolator: CardStyleInterpolators.forModalPresentationIOS,
-    headerShown: false,
-    animationTypeForReplace: 'pop',
 }
 
 const App = () => {
@@ -59,16 +37,28 @@ const App = () => {
                 headerShown: true
             }}>
                 <TimerNavigator.Screen name="Timers" component={TimerTab} options={cardStyle}/>
-                <TimerNavigator.Screen name="TimerModal" component={TimerModalTab} options={modalStyle}  />
-            
-            </TimerNavigator.Navigator >
+                <TimerNavigator.Screen name="EditTimer" component={EditTimerTab} options={modalStyle}/>
+
+            </TimerNavigator.Navigator>
         );
     }
 
-  return (
-    // TODO: wrap TimerStack with relevant providers for React Genie
-          <TimerStack/>
-  );
+    return (
+        <Provider store={reactGenieStore}>
+            <ModalityProvider
+                displayTranscript={true}
+                codexApiKey={ENV.OPENAI_API_KEY!}
+                codexApiBaseUrl={ENV.OPENAI_API_BASE_URL!}
+                azureSpeechRegion={ENV.AZURE_SPEECH_REGION!}
+                azureSpeechKey={ENV.AZURE_SPEECH_KEY!}
+                extraPrompt={
+                    '// we are using voice recognition. so there may be errors. Try to think about words with similar sounds. For example "address" can actually be "add this".'
+                }
+            >
+                <TimerStack/>
+            </ModalityProvider>
+        </Provider>
+    );
 };
 
 export default App;

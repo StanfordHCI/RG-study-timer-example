@@ -1,9 +1,28 @@
 import {StyleSheet} from "react-native";
+import {StackNavigationOptions} from "@react-navigation/stack/lib/typescript/src/types";
+import {CardStyleInterpolators, HeaderStyleInterpolators} from '@react-navigation/stack';
 
 const font = {
     fontFamily: 'Tahoma',
     letterSpacing: 1.3,
 }
+
+export const cardStyle: StackNavigationOptions = {
+    presentation: 'card',
+    animationEnabled: true,
+    headerStyleInterpolator: HeaderStyleInterpolators.forUIKit,
+    cardStyleInterpolator: CardStyleInterpolators.forHorizontalIOS
+}
+
+export const modalStyle: StackNavigationOptions = {
+    presentation: 'modal',
+    animationEnabled: true,
+    headerStyleInterpolator: HeaderStyleInterpolators.forUIKit,
+    cardStyleInterpolator: CardStyleInterpolators.forModalPresentationIOS,
+    headerShown: false,
+    animationTypeForReplace: 'pop',
+}
+
 
 export const textStyles = StyleSheet.create({
     heading: {
