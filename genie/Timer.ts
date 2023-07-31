@@ -1,8 +1,10 @@
 import "reflect-metadata";
 
-// TODO: you need to implement the logic behind the timer
+// you need to implement the logic behind the timer
 
-// TODO: implement the following properties
+// TODO: - `Timer`: This class represents a timer. It has several properties and methods.
+
+// implement the following properties
 
 // TODO: - `id`: This property is a unique identifier for the timer.
 
@@ -16,7 +18,7 @@ import "reflect-metadata";
 
 // TODO: - `pause`: This property is a boolean value indicating whether the timer is counting down.
 
-// TODO: implement the following methods
+// implement the following methods
 
 // TODO: - `constructor`: This method initializes an instance of the Timer class, with default values for several properties.
 
@@ -30,6 +32,12 @@ import "reflect-metadata";
 
 // TODO: - `startTimer`: This method is used to start the countdown for a timer.
 
-// TODO: - `isFinished`: This method checks if the timer has finished counting down.
+// TODO: - `isFinished`: This method checks if the timer has finished counting down. 
+//          You can get the left seconds of TimeDelta through getLeftSecond().
 
 // TODO: - `countDown`: This method decreases the remaining time on the timer by one second, if the timer isn't paused.
+//          You can change the value of TimeDelta through addOffset().
+
+// add interaction examples of timers
+
+// TODO: - `Examples`: This array contains several examples of timers.

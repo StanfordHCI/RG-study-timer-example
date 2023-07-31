@@ -12,6 +12,7 @@ export const MainView = () => {
             <View style={commonStyles.timerViewContainer}>
                 <button style={commonStyles.button} onClick={() => {
                     // TODO: create a new timer and navigate to EditTimerView
+                    // TODO: replace null with the new timer
                     AppNavigator.push('EditTimer', null)
                 }}>Add New Timer
                 </button>
