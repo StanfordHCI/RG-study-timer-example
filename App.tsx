@@ -10,7 +10,6 @@ import {Provider} from "react-redux";
 import {reactGenieStore} from "./timeStore";
 import { ModalityProvider } from "reactgenie-lib";
 
-
 export let AppNavigator: any = null;
 
 type Props = NativeStackScreenProps<any, any>
