@@ -3,6 +3,7 @@ import React, {useEffect} from "react";
 import {Pressable, Text, View} from "react-native";
 import {commonStyles, textStyles} from './commonStyles';
 
+//TODO: Remove all the TODOs after you have completed the task
 const TimerItemImpl = (props: { id: string }) => {
 
     // TODO: get timer object

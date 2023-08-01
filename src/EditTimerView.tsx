@@ -2,6 +2,7 @@ import {AppNavigator} from '../App';
 import React from 'react';
 import {commonStyles, textStyles} from './commonStyles';
 
+//TODO: Remove all the TODOs after you have completed the task
 const EditTimerViewImpl = (props: { id: string }) => {
     // TODO: get the timer
 

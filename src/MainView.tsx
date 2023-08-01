@@ -4,6 +4,7 @@ import {View} from "react-native";
 import {commonStyles} from "./commonStyles";
 import {TimerListView} from "./TimerListView";
 
+//TODO: Remove all the TODOs after you have completed the task
 export const MainView = () => {
     // TODO: Add code here
 
