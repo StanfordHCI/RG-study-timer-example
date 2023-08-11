@@ -23,9 +23,9 @@ import "reflect-metadata";
 
     // TODO: - `constructor`: This method initializes an instance of the Timer class, with default values for several properties.
 
-    // TODO: - `setup`: This method creates several default timer objects
-
     // TODO: - `CreateTimer`: This static method creates a new timer with a given name, type and duration. The created timer is added to an internal list of timers. If no duration is given, the timer is initialized but not started.
+
+    // TODO: - `setup`: This method creates several default timer objects
 
     // TODO: - `deleteTimer`: This method is used to delete an existing timer.
 
