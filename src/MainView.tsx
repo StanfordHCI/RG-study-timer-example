@@ -3,24 +3,31 @@ import {AppNavigator} from "../App";
 import {View} from "react-native";
 import {commonStyles} from "./commonStyles";
 import {TimerListView} from "./TimerListView";
+import {TimeDelta, useGenieSelector} from "reactgenie-lib";
+import {Timer} from "../genie/Timer";
 
-//TODO: Remove all the TODOs after you have completed the task
 export const MainView = () => {
-    // TODO: Add code here
+    const allTimers =  useGenieSelector(() => {
+        return Timer.All(); //get all counters
+    });
 
     return (
         <View style={commonStyles.appContainer}>
             <View style={commonStyles.timerViewContainer}>
                 <button style={commonStyles.button} onClick={() => {
-                    // TODO: create a new timer and navigate to EditTimerView
-                    // TODO: replace null with the new timer
-                    AppNavigator.push('EditTimer', null)
+                    const timer = Timer.CreateTimer({
+                        name: "NewTimer",
+                        type: "Random",
+                        delta: TimeDelta.CreateTimeDelta({}),
+                        created: false,
+                        paused: false
+                    });
+                    AppNavigator.push('EditTimer', timer)
                 }}>Add New Timer
                 </button>
             </View>
 
-            // TODO: Fill in elements to be displayed
-            <TimerListView elements={[]}/>
+            <TimerListView elements={allTimers}/>
         </View>
     )
 }

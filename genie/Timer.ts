@@ -1,44 +1,130 @@
 import "reflect-metadata";
+import {GenieClass, DataClass, int, GenieProperty, GenieKey, GenieFunction, TimeDelta} from "reactgenie-lib";
 
 // you need to implement the logic behind the timer
 
-// TODO: - `Timer`: This class represents a timer. It has several properties and methods.
+@GenieClass("A Timer example")
+export class Timer extends DataClass{
+    @GenieKey
+    public id: string;
+    @GenieProperty("Object to hold the time data of the timer")
+    public delta: TimeDelta;
+    @GenieProperty("The name of timer to count")
+    public name: string;
+    @GenieProperty("The type of the timer")
+    public type: string;
+    @GenieProperty("Whether the timer is created or not")
+    public created: boolean;
+    @GenieProperty("Whether the timer is paused or not")
+    public paused: boolean;
 
+    constructor({id, name, type, delta, created, paused}: {id: string, name: string, type: string, delta: TimeDelta, created: boolean, paused: boolean}) {
+        super({})
+        this.id = id;
+        this.name = name;
+        this.type = type;
+        this.created = created;
+        this.delta = delta;
+        this.paused = paused;
+    }
 
-// implement the following properties
+    @GenieFunction()
+    static CreateTimer({name, type, delta, created, paused}:
+                               {name: string, type: string, delta: TimeDelta, created: boolean, paused: boolean}): Timer {
+        const id = Timer.All().length.toString(); // automatically generate a unique id
+        return Timer.CreateObject({id: id, name: name, type: type, created: created, delta: delta, paused: paused});
+    }
 
-    // TODO: - `id`: This property is a unique identifier for the timer.
+    static setup() {
+        Timer.CreateTimer({
+            name:"Pushups",
+            type:"Exercise",
+            created: true,
+            delta: TimeDelta.CreateTimeDelta({
+                hour: 12,
+                minute: 30,
+                second: 30
+            }),
+            paused: false
+        });
 
-    // TODO: - `name`: This property is the name of the timer.
+        Timer.CreateTimer({
+            name:"Pullups",
+            type:"Exercise",
+            created: true,
+            delta: TimeDelta.CreateTimeDelta({
+                hour: 13,
+                minute: 30,
+                second: 30
+            }),
+            paused: false
+        });
 
-    // TODO: - `type`: This property is the type of the timer.
+        Timer.CreateTimer({
+            name:"Ramen",
+            type:"Cooking",
+            created: true,
+            delta: TimeDelta.CreateTimeDelta({
+                hour: 14,
+                minute: 30,
+                second: 30
+            }),
+            paused: false
+        });
+    }
 
-    // TODO: - `delta`: This property is the time left for the timer.
+    // @GenieFunction()
+    // delete(): void {
+    //     Timer.DeleteObject({id: this.id});
+    // }
 
-    // TODO: - `created`: This property is a boolean value indicating whether the timer is created.
+    @GenieFunction()
+    deleteTimer(): void {
+        Timer.DeleteObject({id: this.id});
+    }
 
-    // TODO: - `pause`: This property is a boolean value indicating whether the timer is counting down.
+    @GenieFunction()
+    pauseTimer(): void {
+        this.paused = true;
+    }
 
-// implement the following methods
+    @GenieFunction()
+    startTimer(): void {
+        this.paused = false;
+    }
 
-    // TODO: - `constructor`: This method initializes an instance of the Timer class, with default values for several properties.
+    @GenieFunction()
+    isFinished(): boolean {
+        return this.delta.getLeftSecond() === 0;
+    }
 
-    // TODO: - `CreateTimer`: This static method creates a new timer with a given name, type and duration. The created timer is added to an internal list of timers. If no duration is given, the timer is initialized but not started.
+    @GenieFunction()
+    countDown(): void {
+        if (!this.paused) {
+            this.delta.addOffset({
+                hour: 0,
+                minute: 0,
+                second: -1
+            });
+        }
+    }
 
-    // TODO: - `setup`: This method creates several default timer objects
-
-    // TODO: - `deleteTimer`: This method is used to delete an existing timer.
-
-    // TODO: - `pauseTimer`: This method is used to stop the countdown for a timer.
-
-    // TODO: - `startTimer`: This method is used to start the countdown for a timer.
-
-    // TODO: - `isFinished`: This method checks if the timer has finished counting down. 
-    //          You can get the left seconds of TimeDelta through getLeftSecond().
-
-    // TODO: - `countDown`: This method decreases the remaining time on the timer by one second, if the timer isn't paused.
-    //          You can change the value of TimeDelta through addOffset().
-
-// add interaction examples of timers
-
-    // TODO: - `Examples`: This array contains several examples of timers.
+    static Examples = [
+        {
+            user_utterance: "Increase this timer by an hour",
+            example_parsed: "Timer.Current().delta.addOffset(hour: 1, minute: 0, second: 0)"
+        },
+        // {
+        //     user_utterance: "Increase this timer by a minute",
+        //     example_parsed: "Timer.Current().delta.addOffset(hour: 0, minute: 1, second: 0)"
+        // },
+        {
+            user_utterance: "show me all timers",
+            example_parsed: 'Timer.All()',
+        },
+        {
+            user_utterance: "Delete this timer",
+            example_parsed: 'Timer.Current().deleteTimer()',
+        }
+    ]
+}

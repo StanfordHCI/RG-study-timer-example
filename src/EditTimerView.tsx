@@ -1,10 +1,14 @@
 import {AppNavigator} from '../App';
 import React from 'react';
 import {commonStyles, textStyles} from './commonStyles';
+import {useGenieSelector, GenieClassInterface} from "reactgenie-lib";
+import {Timer} from "../genie/Timer";
 
-//TODO: Remove all the TODOs after you have completed the task
 const EditTimerViewImpl = (props: { id?: string }) => {
     // TODO: get the timer
+    const timer =  useGenieSelector(() => {//get counter by id
+        return Timer.GetObject(props);
+    });
 
     return (
         <div style={commonStyles.appContainer}>
@@ -12,61 +16,59 @@ const EditTimerViewImpl = (props: { id?: string }) => {
 
                 <div style={commonStyles.numericInputContainer}>
                     <input style={commonStyles.numericInput} type='number' min={0} max={60} value={
-                        // TODO: get the hour
-                        0
+                        timer.delta.hour
                     }
-                           onChange={(e) =>
-                               null // TODO: set the hour = parseInt(e.target.value)
+                           onChange={(e) => {
+                               timer.delta.hour = parseInt(e.target.value);
+                           }
                     }/>
                     <label style={textStyles.heading}> : </label>
                     <input style={commonStyles.numericInput} type='number' min={0} max={60} value={
-                        // TODO: get the timer delta minute
-                        0
+                        timer.delta.minute
                     }
-                           onChange={(e) =>
-                               null // TODO: set the timer delta minute = parseInt(e.target.value)
+                           onChange={(e) => {
+                               timer.delta.minute = parseInt(e.target.value)
+                           }
                     }/>
                     <label style={textStyles.heading}> : </label>
                     <input style={commonStyles.numericInput} type='number' min={0} max={60} value={
-                        // TODO: get the timer delta second
-                        0
+                        timer.delta.second
                     }
                            onChange={(e) =>
-                               null // TODO: set the timer delta second = parseInt(e.target.value)
+                               timer.delta.second = parseInt(e.target.value)
                     }/>
                 </div>
 
                 <div style={commonStyles.sectionContainer}>
                     <label style={textStyles.label}>Title </label>
                     <input style={commonStyles.textInput} type='text' size={20} value={
-                        // TODO: get the timer name
-                        ''
+                        timer.name
                     }
-                           onChange={(e) =>
-                            null // TODO: set the timer name = e.target.value
+                           onChange={(e) => {
+                               timer.name = e.target.value
+                           }
                     }></input>
                     <label style={textStyles.label}>Description </label>
                     <input style={commonStyles.textInput} type='text' size={20} value={
-                        // TODO: get the timer type
-                        ''
+                        timer.type
                     }
                            onChange={(e) =>
-                               null // TODO: set the timer type = e.target.value
+                               timer.type = e.target.value
                            }></input>
                 </div>
 
                 {
                     // TODO: Replace the below block with dataload condition
                     // TODO: get the timer created
-                    false ?
+                    !timer.created ?
                         <div style={commonStyles.sectionContainer}>
                             <button style={commonStyles.button} onClick={() => {
-                                // TODO: set the timer created = true
+                                timer.created = true;
                                 AppNavigator.pop();
                             }}>Add Timer
                             </button>
                             <button style={commonStyles.button} onClick={() => {
-                                null // TODO: Add code to delete the timer
+                                timer.deleteTimer();
                                 AppNavigator.pop();
                             }}>Cancel
                             </button>
@@ -78,8 +80,8 @@ const EditTimerViewImpl = (props: { id?: string }) => {
                             }}>Save Timer
                             </button>
                             <button style={commonStyles.button} onClick={() => {
+                                timer.deleteTimer();
                                 AppNavigator.pop();
-                                null // TODO: Add code to delete the timer
                             }}>Delete Timer
                             </button>
                         </div>
@@ -90,6 +92,8 @@ const EditTimerViewImpl = (props: { id?: string }) => {
     );
 };
 
-// TODO: bind object to view
-export const EditTimerView = EditTimerViewImpl;
-
+export const EditTimerView = GenieClassInterface(
+    "Timer",
+    "Create a Timer",
+    (target: Timer) => target.created ? -1 : 1
+)(EditTimerViewImpl);

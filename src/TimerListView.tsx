@@ -2,8 +2,8 @@ import React from "react";
 import {View} from "react-native";
 import {commonStyles} from "./commonStyles";
 import {TimerItemView} from "./TimerItemView";
+import {GenieClassInterface} from "reactgenie-lib";
 
-//TODO: Remove all the TODOs after you have completed the task
 export const TimerListViewImpl = (props: { elements: { id: string }[] }) => {
     return (
         <View style={commonStyles.appContainer}>
@@ -18,5 +18,4 @@ export const TimerListViewImpl = (props: { elements: { id: string }[] }) => {
     )
 }
 
-// TODO: bind the timer object to the TimerListView
-export const TimerListView = TimerListViewImpl;
+export const TimerListView = GenieClassInterface("Timer[]", "Timer List")(TimerListViewImpl)

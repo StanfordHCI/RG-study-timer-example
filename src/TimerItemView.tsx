@@ -2,23 +2,25 @@ import {AppNavigator} from "../App";
 import React, {useEffect} from "react";
 import {Pressable, Text, View} from "react-native";
 import {commonStyles, textStyles} from './commonStyles';
+import { Timer } from "../genie/Timer";
+import { useGenieSelector, GenieClassInterface} from "reactgenie-lib";
 
-//TODO: Remove all the TODOs after you have completed the task
 const TimerItemImpl = (props: { id: string }) => {
 
-    // TODO: get timer object
+    const timer =  useGenieSelector(() => {
+        return Timer.GetObject(props);
+    });
 
     useEffect(() => {
         // If the timer is 0 or paused, we don't need to decrease it further
-        // TODO: stop if the timer is paused or finished counting down
-        if (true) return;
+        if (timer.paused || timer.isFinished()) return;
 
         const interval = setInterval(() => {
-            // TODO: decrease the timer by 1 second
+            timer.countDown();
         }, 1000);
         return () => clearInterval(interval);
     }, [
-        // TODO: monitor if the timer is paused
+        timer.paused
     ]);
 
     return (
@@ -29,27 +31,26 @@ const TimerItemImpl = (props: { id: string }) => {
             }}>
                 <View style={commonStyles.inline}>
                     <Text style={textStyles.heading2}>{
-                        // TODO: get timer type
+                        timer.type
                     }</Text>
                     <Text
                         style={textStyles.heading3}>{
-                            // TODO: format and display the timer countdown like {hour} : {minute} : {second}
+                            timer.delta.toString()
                         }</Text>
                 </View>
                 <View style={commonStyles.inline}>
                     <Text style={textStyles.text}>{
-                        // TODO: get timer name
+                        timer.name
                     } </Text>
                 </View>
             </Pressable>
             {
-                // TODO: check if the timer is paused
-                true ?
+                timer.paused ?
                     <button style={commonStyles.button} onClick={() => {
-                        // TODO: start the timer
+                        timer.pause = false;
                     }}>Start</button> :
                     <button style={commonStyles.button} onClick={() => {
-                        // TODO: pause the timer
+                        timer.pause = true;
                     }}>Pause</button>
             }
         </View>
@@ -57,5 +58,8 @@ const TimerItemImpl = (props: { id: string }) => {
     );
 };
 
-// TODO: bind the timer object to the TimerItemView
-export const TimerItemView =TimerItemImpl;
+export const TimerItemView = GenieClassInterface(
+    "Timer",
+    (timer: Timer) => `${timer.id} Timer`,
+    (timer: Timer) => timer.created ? 1 : -1
+)(TimerItemImpl);
